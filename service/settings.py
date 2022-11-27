@@ -27,7 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = "core.User"
+REST_FRAMEWORK = {"TEST_REQUEST_DEFAULT_FORMAT": "json"}
+AUTH_USER_MODEL = "authentication.User"
 
 # Application definition
 
@@ -38,13 +39,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Custom stuff
     "rest_framework",
     "drf_yasg",
-    # Custom apps
-    "core",
-    "quiz",
-    "question",
-    "result",
+    "authentication",
+    "quizzes",
+    "questions",
+    "results",
 ]
 
 MIDDLEWARE = [
@@ -129,3 +130,5 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+DJANGO_SETTINGS_MODULE = "service.settings"
+FIXTURE_DIRS = ["tests/fixtures"]

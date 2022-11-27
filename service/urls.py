@@ -24,13 +24,11 @@ schema_view = get_schema_view(
         title="Quiz API",
         default_version="v1",
         description="API for Quiz management",
-        terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="dpuljic01@gmail.com"),
-        license=openapi.License(name="BSD License"),
     ),
     public=True,
-    permission_classes=[permissions.AllowAny],
-    authentication_classes=[],
+    # permission_classes=[permissions.AllowAny],
+    # authentication_classes=[],
 )
 
 urlpatterns = [
@@ -45,5 +43,6 @@ urlpatterns = [
         name="schema-swagger-ui",
     ),
     path("admin/", admin.site.urls),
-    path("api/", include("quiz.urls")),
+    path("api/v1/quizzes/", include("quizzes.urls")),
+    path("api/v1/auth/", include("authentication.urls")),
 ]
