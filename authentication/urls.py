@@ -1,5 +1,5 @@
 from django.urls import path
 
-from authentication import views
+from authentication.views import UserListCreateAPIView
 
-urlpatterns = [path("login", views.login)]
+urlpatterns = [path("", UserListCreateAPIView.as_view(), name="user-list-create")]

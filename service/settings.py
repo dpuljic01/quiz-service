@@ -11,6 +11,13 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import environ
+
+env = environ.Env(
+    EMAIL_HOST=(str, "smtp.gmail.com")  # set default if not present in .env
+)
+environ.Env.read_env()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +32,7 @@ SECRET_KEY = "django-insecure-w=cb*b@$5t2i_!lsuac^a6%h(^ft72&9)cgc=mpk+zrpuqm@^f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 REST_FRAMEWORK = {"TEST_REQUEST_DEFAULT_FORMAT": "json"}
 AUTH_USER_MODEL = "authentication.User"
@@ -39,13 +46,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Custom stuff
+    # Custom apps
     "rest_framework",
     "drf_yasg",
     "authentication",
     "quizzes",
     "questions",
-    "results",
 ]
 
 MIDDLEWARE = [
@@ -132,3 +138,11 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DJANGO_SETTINGS_MODULE = "service.settings"
 FIXTURE_DIRS = ["tests/fixtures"]
+
+# Settings for sending mails
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")

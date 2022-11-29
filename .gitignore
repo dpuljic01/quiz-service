@@ -22,6 +22,7 @@ celerybeat-schedule
 celerybeat.pid
 
 # Environments
+.idea
 .env
 .venv
 env/

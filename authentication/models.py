@@ -1,8 +1,16 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
+from django_extensions.db.models import TimeStampedModel
 
-from helpers.models import BaseModel
+from helpers.enums import UserRole
+
+ROLE_CHOICES = (
+    (UserRole.GUEST.value, "Guest"),
+    (UserRole.PARTICIPANT.value, "Participant"),
+    (UserRole.CREATOR.value, "Creator"),
+    (UserRole.ADMIN.value, "Admin"),
+)
 
 
 class UserManager(BaseUserManager):
@@ -24,12 +32,12 @@ class UserManager(BaseUserManager):
         )
 
 
-class User(AbstractBaseUser, PermissionsMixin, BaseModel):
+class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     email = models.EmailField(primary_key=True, max_length=255)
     username = models.CharField(max_length=120, unique=True, null=False, blank=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    quizzes = models.ManyToManyField("quizzes.Quiz")
+    role = models.IntegerField(choices=ROLE_CHOICES, default=0)
     objects = UserManager()
 
     USERNAME_FIELD = "email"
@@ -37,7 +45,3 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
     class Meta:
         db_table = "user"
-
-    @property
-    def token(self):
-        return ""

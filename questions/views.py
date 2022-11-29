@@ -1,26 +1,18 @@
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 
-from questions.models import Question
-from questions.serializers import QuestionSerializer
+from questions.models import Question, Answer
+from questions.serializers import QuestionSerializer, AnswerSerializer
+from quizzes.permissions import IsOwnerPermission
 
 
-class QuestionListCreateAPIView(generics.ListCreateAPIView):
+class QuestionCreateAPIView(generics.CreateAPIView):
     queryset = Question.objects.all()
+    permission_classes = [IsAuthenticated, IsOwnerPermission]
     serializer_class = QuestionSerializer
 
-    def perform_create(self, serializer):
-        # serializer.save(user=self.request.user
-        serializer.save()
 
-
-class QuizDetailUpdateAPIView(generics.RetrieveUpdateAPIView):
-    queryset = Question.objects.all()
-    serializer_class = QuestionSerializer
-    lookup_field = "pk"
-
-    def perform_update(self, serializer):
-        instance = serializer
-        if not instance.topic:
-            instance.topic = "General"
-        instance.save()
-        return instance
+class AnswerCreateAPIView(generics.CreateAPIView):
+    queryset = Answer.objects.all()
+    permission_classes = [IsAuthenticated, IsOwnerPermission]
+    serializer_class = AnswerSerializer

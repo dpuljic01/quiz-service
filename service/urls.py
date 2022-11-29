@@ -27,8 +27,8 @@ schema_view = get_schema_view(
         contact=openapi.Contact(email="dpuljic01@gmail.com"),
     ),
     public=True,
-    # permission_classes=[permissions.AllowAny],
-    # authentication_classes=[],
+    permission_classes=[permissions.AllowAny],
+    authentication_classes=[],
 )
 
 urlpatterns = [
@@ -44,5 +44,5 @@ urlpatterns = [
     ),
     path("admin/", admin.site.urls),
     path("api/v1/quizzes/", include("quizzes.urls")),
-    path("api/v1/auth/", include("authentication.urls")),
+    path("api/v1/users/", include("authentication.urls")),
 ]

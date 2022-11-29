@@ -1,22 +1,15 @@
 from django.db import models
-
-from helpers.models import BaseModel
-from quizzes.models import Quiz
+from django_extensions.db.models import TimeStampedModel
 
 
-class QuestionManager(models.Manager):
-    pass
-
-
-class Question(BaseModel):
+class Question(TimeStampedModel):
     text = models.CharField(max_length=256)
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
-    answered_at = models.DateTimeField(null=True, blank=True)
-
-    objects = QuestionManager()
+    quiz = models.ForeignKey("quizzes.Quiz", on_delete=models.CASCADE)
+    index = models.PositiveIntegerField()
 
     class Meta:
         db_table = "question"
+        ordering = ["index"]
 
     def __str__(self):
         return str(self.text)
@@ -24,17 +17,16 @@ class Question(BaseModel):
     def get_answers(self):
         return self.answer_set.all()
 
-    def is_answered(self):
-        return self.answered_at is not None
 
-
-class Answer(BaseModel):
+class Answer(TimeStampedModel):
     text = models.CharField(max_length=256)
     correct = models.BooleanField()
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    index = models.PositiveIntegerField()
 
     class Meta:
         db_table = "answer"
+        ordering = ["index"]
 
     def __str__(self):
         return f"answer: {self.text}, correct: {self.correct}"
